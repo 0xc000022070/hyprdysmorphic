@@ -52,10 +52,6 @@
         hyprwayland-scanner.follows = "hyprwayland-scanner";
       };
     };
-    hyprland-contrib = {
-      url = "github:hyprwm/contrib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     hyprland = {
       url = "https://github.com/hyprwm/Hyprland.git";
