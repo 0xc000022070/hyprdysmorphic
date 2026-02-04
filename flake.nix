@@ -74,6 +74,20 @@
       type = "git";
       submodules = true;
     };
+    hyprlauncher = {
+      url = "github:hyprwm/hyprlauncher";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        systems.follows = "systems";
+        hyprwayland-scanner.follows = "hyprwayland-scanner";
+        hyprgraphics.follows = "hyprgraphics";
+        aquamarine.follows = "aquamarine";
+        hyprwire.follows = "hyprwire";
+        hyprutils.follows = "hyprutils";
+        hyprlang.follows = "hyprlang";
+        hyprtoolkit.follows = "hyprtoolkit";
+      };
+    };
   };
 
   outputs = _inputs @ {
@@ -81,10 +95,11 @@
     nixpkgs,
     systems,
     hyprland,
+    hyprlauncher,
     ...
   }: let
     eachSystem = nixpkgs.lib.genAttrs (import systems);
   in {
-    packages = eachSystem (system: hyprland.packages.${system});
+    packages = eachSystem (system: hyprland.packages.${system} // hyprlauncher.packages.${system});
   };
 }
