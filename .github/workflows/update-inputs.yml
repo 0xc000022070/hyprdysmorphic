@@ -1,0 +1,43 @@
+name: "Update Hyprland stack (flake + override)"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0" # 00:00 every Sunday (weekly)
+
+jobs:
+  update:
+    name: "Update flake inputs and sync Hyprland override"
+    permissions:
+      contents: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@v3
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/flakehub-cache-action@v3
+
+      - name: Update flake inputs
+        run: nix flake update
+
+      - name: Sync Hyprland override from flake.lock
+        run: sh .github/update.sh
+
+      - name: Verify hyprland, hyprlauncher, xdg-desktop-portal-hyprland
+        run: |
+          nix build --no-link ".#hyprland"
+          nix build --no-link ".#hyprlauncher"
+          nix build --no-link ".#xdg-desktop-portal-hyprland"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add flake.lock flake.nix
+          git diff --staged --quiet || git commit -m "flake-update: bump flake inputs and sync Hyprland override"
+          git push
