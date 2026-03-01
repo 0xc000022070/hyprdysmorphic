@@ -96,6 +96,10 @@
   }: let
     eachSystem = nixpkgs.lib.genAttrs (import systems);
   in {
+    overlays.default = final: prev: {
+      inherit (self.packages.${prev.system}) xdg-desktop-portal-hyprland hyprlauncher hyprland;
+    };
+
     packages = eachSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
     in
