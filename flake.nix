@@ -110,8 +110,8 @@
           # disko does not work with the src they've set
           src = pkgs.fetchgit {
             url = "https://github.com/hyprwm/Hyprland";
-            rev = "55b404b0a13518da3252cb176cf4a5a6ce9df2be";
-            sha256 = "sha256-MItX6zsRwHKZWxJBxU/Jq3FkNMV75zeNwEVjYFkerx4=";
+            rev = "abd4abb5e654707edba6f527058292333149f90f";
+            sha256 = "sha256-il23IsRR4VvihBpYKYSWVNSCwQBojOkd5D3RVwQM/7c=";
           };
         });
       });
