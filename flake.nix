@@ -106,6 +106,11 @@
       hyprland.packages.${system}
       // hyprlauncher.packages.${system}
       // {
+        # Drop when upstream propagates pangocairo for hyprtoolkit consumers.
+        hyprlauncher = hyprlauncher.packages.${system}.hyprlauncher.overrideAttrs (oldAttrs: {
+          buildInputs = (oldAttrs.buildInputs or []) ++ [pkgs.pango];
+        });
+
         hyprland = hyprland.packages.${system}.hyprland.overrideAttrs (_oldAttrs: {
           # disko does not work with the src they've set
           src = pkgs.fetchgit {
