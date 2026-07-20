@@ -112,11 +112,14 @@
         });
 
         hyprland = hyprland.packages.${system}.hyprland.overrideAttrs (_oldAttrs: {
-          # disko does not work with the src they've set
+          # disko does not work with the src they've set. Keep rev in sync with
+          # the hyprland input: an older src breaks against the newer hyprutils
+          # (explicit CSharedPointer/CWeakPointer operator bool).
           src = pkgs.fetchgit {
             url = "https://github.com/hyprwm/Hyprland";
-            rev = "d486a5fe69c9800e75aed76ae4beb3183ac8886d";
-            sha256 = "sha256-phWZ+qJyQcQY/fTsi0FtjgdjJSKffJ54biMcUnf+t9E=";
+            rev = "2174f26a142d32823ceb8d7039e39eef52dbd050";
+            fetchSubmodules = true;
+            hash = "sha256-uG4+cGKQDKygX9G4kv6mUEJ1ZK3pcWWwj/6aAGBRQqg=";
           };
         });
       });
