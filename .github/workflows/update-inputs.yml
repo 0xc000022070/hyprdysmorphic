@@ -1,4 +1,4 @@
-name: "Update Hyprland stack (flake + override)"
+name: "Update Hyprland stack"
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   update:
-    name: "Update flake inputs and sync Hyprland override"
+    name: "Update flake inputs"
     permissions:
       contents: write
 
@@ -25,9 +25,6 @@ jobs:
       - name: Update flake inputs
         run: nix flake update
 
-      - name: Sync Hyprland override from flake.lock
-        run: sh .github/update.sh
-
       - name: Verify hyprland, hyprlauncher, xdg-desktop-portal-hyprland
         run: |
           nix build --no-link ".#hyprland"
@@ -39,5 +36,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add flake.lock flake.nix
-          git diff --staged --quiet || git commit -m "flake-update: bump flake inputs and sync Hyprland override"
+          git diff --staged --quiet || git commit -m "flake-update: bump flake inputs"
           git push
