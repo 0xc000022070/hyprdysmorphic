@@ -52,6 +52,19 @@
         hyprwayland-scanner.follows = "hyprwayland-scanner";
       };
     };
+    hyprland-guiutils = {
+      url = "github:hyprwm/hyprland-guiutils";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        systems.follows = "systems";
+        aquamarine.follows = "aquamarine";
+        hyprgraphics.follows = "hyprgraphics";
+        hyprlang.follows = "hyprlang";
+        hyprtoolkit.follows = "hyprtoolkit";
+        hyprutils.follows = "hyprutils";
+        hyprwayland-scanner.follows = "hyprwayland-scanner";
+      };
+    };
 
     hyprland = {
       url = "https://github.com/hyprwm/Hyprland.git";
@@ -64,7 +77,7 @@
         aquamarine.follows = "aquamarine";
         hyprutils.follows = "hyprutils";
         hyprlang.follows = "hyprlang";
-        hyprland-guiutils.inputs.hyprtoolkit.follows = "hyprtoolkit";
+        hyprland-guiutils.follows = "hyprland-guiutils";
         hyprwire.follows = "hyprwire";
       };
       type = "git";
@@ -91,6 +104,7 @@
     nixpkgs,
     systems,
     hyprland,
+    hyprland-guiutils,
     hyprlauncher,
     ...
   }: let
@@ -102,6 +116,9 @@
 
     packages = eachSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
+      hyprlandPackage = hyprland.packages.${system}.hyprland.override {
+        inherit (hyprland-guiutils.packages.${system}) hyprland-guiutils;
+      };
     in
       hyprland.packages.${system}
       // hyprlauncher.packages.${system}
@@ -111,7 +128,7 @@
           buildInputs = (oldAttrs.buildInputs or []) ++ [pkgs.pango];
         });
 
-        hyprland = hyprland.packages.${system}.hyprland.overrideAttrs (_oldAttrs: {
+        hyprland = hyprlandPackage.overrideAttrs (_oldAttrs: {
           src = hyprland;
         });
       });
